@@ -46,3 +46,40 @@ exports.createUser = async (req, res) => {
         });
     }
 };
+
+exports.deleteUser = async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+        return res.status(400).json({ message: "ID utilisateur requis." });
+    }
+
+    try {
+        const user = await User.findByIdAndDelete(id);
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé." });
+        }
+
+        res.status(200).json({ message: "Utilisateur supprimé avec succès." });
+    } catch (error) {
+        res.status(500).json({
+            message: "Erreur lors de la suppression de l'utilisateur",
+            error: error.message,
+        });
+    }
+};
+
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find({}, "-password"); // Exclut le mot de passe des résultats
+        res.status(200).json({
+            message: "Liste des utilisateurs récupérée avec succès.",
+            users,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Erreur lors de la récupération des utilisateurs",
+            error: error.message,
+        });
+    }
+};

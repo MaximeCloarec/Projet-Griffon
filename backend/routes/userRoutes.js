@@ -1,7 +1,6 @@
 const express = require("express");
 const stuffController = require("../controllers/user");
 
-
 module.exports = (app) => {
     const router = express.Router();
     router.post("/register", stuffController.createUser);
@@ -15,6 +14,10 @@ module.exports = (app) => {
             userId: id,
         });
     });
+
+    router.delete("/user/:id", stuffController.deleteUser);
+
+    router.get("/users", stuffController.getAllUsers);
 
     return router;
 };
