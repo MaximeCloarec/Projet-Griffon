@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
     email: {
@@ -20,8 +21,23 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique: true,
         trim: true,
+    },
+    createdGames: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Game",
+        },
+    ],
+    joinedGames: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Game",
+        },
+    ],
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
 });
 
