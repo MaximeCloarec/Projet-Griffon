@@ -1,5 +1,5 @@
 //Variables environment
-require("dotenv").config();
+require("dotenv").config({path: __dirname + "/.env"});
 
 //Server creation
 const http = require("http");
@@ -21,9 +21,9 @@ connectToDatabase();
 
 //Socket IO setup
 io.on("connection", (socket) => {
+    //Event for connection
     console.log("A user connected:", socket.id);
 
-    // Handle events here
     socket.on("disconnect", () => {
         console.log("User disconnected:", socket.id);
     });
