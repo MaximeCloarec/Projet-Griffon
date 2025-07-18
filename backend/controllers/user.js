@@ -125,3 +125,28 @@ exports.loginUser = async (req, res) => {
         });
     }
 };
+
+exports.getUserById = async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+        return res.status(400).json({ message: "ID utilisateur requis." });
+    }
+
+    try {
+        const user = await User.findById(id, "-password"); // Exclut le mot de passe des résultats
+        if (!user) {
+            return res.status(401).json({ message: "Utilisateur non trouvé." });
+        }
+
+        res.status(200).json({
+            message: "Utilisateur récupéré avec succès.",
+            user,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Erreur lors de la récupération de l'utilisateur",
+            error: error.message,
+        });
+    }
+};
