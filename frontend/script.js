@@ -47,3 +47,37 @@ async function deleteUser(userId) {
         console.error("Error deleting user:", error);
     }
 }
+
+document.getElementById("loginButton").addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent form submission
+    loginUser();
+});
+
+async function loginUser() {
+    const email = document.getElementById("usernameLogin").value;
+    const password = document.getElementById("passwordLogin").value;
+
+    try {
+        const response = await fetch("http://localhost:3000/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Login failed");
+        }
+
+        const data = await response.json();
+        console.log("Login successful:", data);
+        localStorage.setItem("userId", data.user.id);
+        document.getElementById(
+            "userId"
+        ).textContent = `User ID: ${data.user.id}`;
+        // Redirect or update UI as needed
+    } catch (error) {
+        console.error("Error logging in:", error);
+    }
+}

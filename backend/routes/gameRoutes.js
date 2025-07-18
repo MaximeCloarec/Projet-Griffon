@@ -1,10 +1,11 @@
 const express = require("express");
+const generateCodeRoom = require("../utils/generateCodeRoom");
+const gameController = require("../controllers/game");
 
 module.exports = () => {
     const router = express.Router();
 
-    router.post("/game", async (req, res) => {
-    });
+    router.post("/game", generateCodeRoom, gameController.createGame);
 
     router.get("/game/:roomCode", async (req, res) => {
         const { roomCode } = req.params;
