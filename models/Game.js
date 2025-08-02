@@ -1,7 +1,3 @@
-import mongoose from "mongoose";
-import participantSchema from "./Participant.js";
-import assetSchema from "./asset.js";
-
 const gameSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     expiresAt: { type: Date, required: true },

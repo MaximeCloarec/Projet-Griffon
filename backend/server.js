@@ -4,7 +4,6 @@ require("dotenv").config({path: __dirname + "/.env"});
 //Server creation
 const http = require("http");
 const app = require("./app"); // Import the Express app
-const connectToDatabase = require("./config/db"); // Import the database connection function
 const { Server } = require("socket.io");
 
 const PORT = process.env.PORT || 3000;
@@ -17,7 +16,7 @@ const io = new Server(server, {
 });
 
 //Database connection
-connectToDatabase();
+// connectToDatabase();
 
 //Socket IO setup
 io.on("connection", (socket) => {

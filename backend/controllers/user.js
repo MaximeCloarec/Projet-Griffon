@@ -1,10 +1,11 @@
-const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const { PrismaClient } = require("../generated/prisma");
+const prisma = new PrismaClient();
 
 exports.createUser = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !email || !password) {
+    if (!email || !password) {
         return res
             .status(400)
             .json({ message: "Tous les champs sont requis." });
@@ -12,30 +13,28 @@ exports.createUser = async (req, res) => {
 
     try {
         // Vérifie si l'email existe déjà
-        const existingUser = await User.findOne({ email });
+        const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) {
             return res
                 .status(409)
                 .json({ message: "Un compte existe déjà avec cet email." });
         }
 
-        // Hash le mot de passe
+        // Hash du mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Crée et sauvegarde l'utilisateur
-        const newUser = new User({
-            username,
-            email,
-            password: hashedPassword,
+        // Création de l'utilisateur
+        const newUser = await prisma.user.create({
+            data: {
+                email: email,
+                password: hashedPassword,
+            },
         });
-
-        await newUser.save();
 
         res.status(201).json({
             message: "Utilisateur créé avec succès.",
             user: {
-                id: newUser._id,
-                username: newUser.username,
+                id: newUser.id,
                 email: newUser.email,
             },
         });
@@ -47,15 +46,38 @@ exports.createUser = async (req, res) => {
     }
 };
 
-exports.deleteUser = async (req, res) => {
-    const { id } = req.params;
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await prisma.user.findMany({
+            select: {
+                id: true,
+                email: true,
+                createdAt: true,
+                createdGames: true,
+                joinedGames: true,
+            },
+        }); // Exclut le mot de passe des résultats
+        res.status(200).json({
+            message: "Liste des utilisateurs récupérée avec succès.",
+            users,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Erreur lors de la récupération des utilisateurs",
+            error: error.message,
+        });
+    }
+};
 
+exports.deleteUser = async (req, res) => {
+    const id = parseInt(req.params.id, 10);
     if (!id) {
         return res.status(400).json({ message: "ID utilisateur requis." });
     }
-
     try {
-        const user = await User.findByIdAndDelete(id);
+        const user = await prisma.user.delete({
+            where: { id: id },
+        });
         if (!user) {
             return res.status(404).json({ message: "Utilisateur non trouvé." });
         }
@@ -68,21 +90,7 @@ exports.deleteUser = async (req, res) => {
         });
     }
 };
-
-exports.getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find({}, "-password"); // Exclut le mot de passe des résultats
-        res.status(200).json({
-            message: "Liste des utilisateurs récupérée avec succès.",
-            users,
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: "Erreur lors de la récupération des utilisateurs",
-            error: error.message,
-        });
-    }
-};
+//Need update to use Prisma
 
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;

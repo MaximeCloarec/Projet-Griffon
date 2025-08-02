@@ -1,8 +1,10 @@
-const Game = require("../models/game");
+
 
 exports.createGame = async (req, res) => {
-    const { romeCode, owner } = req.body;
-    if (!romeCode || !owner) {
+    console.log("Creating game with data:", req.body);
+
+    const { roomCode, owner } = req.body;
+    if (!roomCode || !owner) {
         return res
             .status(400)
             .json({ message: "Room code and owner are required" });
@@ -10,7 +12,7 @@ exports.createGame = async (req, res) => {
 
     try {
         const game = new Game({
-            roomCode: romeCode,
+            roomCode: roomCode,
             owner: owner,
             expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now
         });

@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 
 const participantSchema = new mongoose.Schema({
     userId: {
@@ -10,4 +9,4 @@ const participantSchema = new mongoose.Schema({
     validated: { type: Boolean, default: false },
 });
 
-export default participantSchema;
+module.exports = participantSchema;
