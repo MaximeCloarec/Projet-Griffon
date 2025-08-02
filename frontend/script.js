@@ -112,7 +112,6 @@ async function createGame() {
 async function registerUser() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    console.log(email, password);
     try {
         const response = await fetch("http://localhost:3000/api/register", {
             method: "POST",
