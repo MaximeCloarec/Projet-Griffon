@@ -1,5 +1,6 @@
 //Variables environment
-require("dotenv").config({path: __dirname + "/.env"});
+require("dotenv").config({ path: __dirname + "/.env" });
+
 
 //Server creation
 const http = require("http");
@@ -15,8 +16,6 @@ const io = new Server(server, {
     },
 });
 
-//Database connection
-// connectToDatabase();
 
 //Socket IO setup
 io.on("connection", (socket) => {

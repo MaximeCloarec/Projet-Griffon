@@ -90,11 +90,11 @@ exports.deleteUser = async (req, res) => {
         });
     }
 };
-//Need update to use Prisma
 
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
 
+    // Vérifie si les champs sont remplis
     if (!email || !password) {
         return res
             .status(400)
@@ -102,13 +102,15 @@ exports.loginUser = async (req, res) => {
     }
 
     try {
-        const user = await User.findOne({ email });
+        // Vérifie si l'utilisateur existe
+        const user = await prisma.user.findUnique({ where: { email } });
         if (!user) {
             return res
-                .status(401)
-                .json({ message: "Information de connection incorrect." });
+                .status(409)
+                .json({ message: "Information de connection incorrect" });
         }
 
+        // Vérifie le mot de passe
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res
@@ -116,12 +118,13 @@ exports.loginUser = async (req, res) => {
                 .json({ message: "Information de connection incorrect." });
         }
 
+        // Récupère les informations de l'utilisateur sans le mot de passe
         res.status(200).json({
             message: "Connexion réussie.",
             user: {
-                id: user._id,
-                username: user.username,
+                id: user.id,
                 email: user.email,
+                createdAt: user.createdAt,
                 createdGame: user.createdGames,
                 joinedGames: user.joinedGames,
             },
@@ -133,6 +136,9 @@ exports.loginUser = async (req, res) => {
         });
     }
 };
+//Need update to use Prisma
+
+
 
 exports.getUserById = async (req, res) => {
     const { id } = req.params;

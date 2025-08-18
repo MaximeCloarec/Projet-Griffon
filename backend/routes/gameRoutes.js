@@ -7,15 +7,9 @@ module.exports = () => {
 
     router.post("/game", gameController.createGame);
 
-    router.get("/game/:roomCode", async (req, res) => {
-        const { roomCode } = req.params;
-        res.status(200).json({
-            message: "Game details retrieved successfully",
-            roomCode: roomCode,
-        });
-    });
+    router.delete("/game/:gameId", gameController.deleteGame);
 
-    router.delete("/game/:roomCode", async (req, res) => {});
+    router.get("/games", gameController.getGames);
 
     return router;
 };
