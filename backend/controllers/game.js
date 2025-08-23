@@ -2,7 +2,8 @@ const { PrismaClient } = require("../generated/prisma");
 const prisma = new PrismaClient();
 
 exports.createGame = async (req, res) => {
-    const { roomCode, userId } = req.body;
+    const { userId } = req.body;
+    const { roomCode } = req.body;
     console.log("Creating game with data:", roomCode, userId);
     if (!roomCode || !userId) {
         return res
@@ -11,7 +12,7 @@ exports.createGame = async (req, res) => {
     }
 
     try {
-        const newGame = await prisma.Game.create({
+        const newGame = await prisma.game.create({
             data: {
                 roomCode: roomCode,
                 creatorId: userId,
@@ -49,7 +50,7 @@ exports.getGames = async (req, res) => {
 exports.deleteGame = async (req, res) => {
     const { gameId } = req.params;
     console.log(req.params);
-    
+
     console.log(`Deleting game with ID: ${gameId}`);
 
     if (!gameId) {

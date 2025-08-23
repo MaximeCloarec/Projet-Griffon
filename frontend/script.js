@@ -138,17 +138,17 @@ async function loginUser() {
 }
 
 async function createGame(userId) {
-    const roomCode = "123456";
     try {
         const response = await fetch("http://localhost:3000/api/game", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ roomCode, userId }),
+            body: JSON.stringify({ userId }),
         });
         const data = await response.json();
         console.log("Game created successfully:", data);
+        fetchGames(); // Refresh the game list
         // Update UI or redirect as needed
     } catch (error) {
         console.error("Error creating game:", error);
