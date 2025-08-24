@@ -46,7 +46,19 @@ async function fetchGames() {
 function displayUsers(users) {
     containerUser.innerHTML = ""; // Clear previous content
     users.forEach((user) => {
+        console.log(user);
         const userDiv = document.createElement("div");
+        const gamesDiv = document.createElement("div");
+        console.log(user);
+        user.createdGames.forEach((game) => {
+            const gameDiv = document.createElement("div");
+            gameDiv.innerHTML = `
+            <p>Game ID: ${game.id}</p>
+            <p>Game Name: ${game.name}</p>
+            <p>Room Code: ${game.roomCode}</p>
+            <p>Created At: ${new Date(game.createdAt).toLocaleString()}</p>`
+            gamesDiv.appendChild(gameDiv);
+        });
         userDiv.className = "user";
         userDiv.innerHTML = `
             <p>Email: ${user.email}</p>
@@ -54,6 +66,7 @@ function displayUsers(users) {
             <button onclick="deleteUser(${user.id})">Delete User</button>
             <button onclick="createGame(${user.id})">Create Game</button>
         `;
+        userDiv.appendChild(gamesDiv);
         containerUser.appendChild(userDiv);
     });
 }

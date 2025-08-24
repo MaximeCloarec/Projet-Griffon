@@ -25,3 +25,16 @@ CDA projet fil rouge
 2. **Installer les dépendances :**
     ```bash
     npm install
+
+## API Documentation
+ 1. **User Endpoints:**
+    - `POST /api/register` : Register a new user.
+    - `POST /api/login` : Login and receive a JWT token.
+    - `GET /api/users` : Get all users (admin only).
+    - `DELETE /api/user/:id` : Delete a user by ID (admin only).
+    - `GET /api/user/:id/` : Get a user by ID (admin only).
+   
+2. **Game Endpoints:**
+    - `POST /api/game` : Create a new game
+    - `DELETE /api/game/:id` :  Delete a game by ID (admin only).
+    - `GET /api/games` : Get all games. (admin only).

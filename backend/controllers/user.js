@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("../generated/prisma");
 const prisma = new PrismaClient();
 
@@ -117,6 +118,18 @@ exports.loginUser = async (req, res) => {
                 .status(401)
                 .json({ message: "Information de connection incorrect." });
         }
+        //Create JWT Token
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.email,
+                createdAt: user.createdAt,
+                createdGame: user.createdGames,
+                joinedGames: user.joinedGames,
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
 
         // Récupère les informations de l'utilisateur sans le mot de passe
         res.status(200).json({
@@ -128,6 +141,7 @@ exports.loginUser = async (req, res) => {
                 createdGame: user.createdGames,
                 joinedGames: user.joinedGames,
             },
+            token: token,
         });
     } catch (error) {
         res.status(500).json({
@@ -137,8 +151,6 @@ exports.loginUser = async (req, res) => {
     }
 };
 //Need update to use Prisma
-
-
 
 exports.getUserById = async (req, res) => {
     const { id } = req.params;
