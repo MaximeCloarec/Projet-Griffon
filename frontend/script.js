@@ -18,7 +18,7 @@ document.getElementById("createGame").addEventListener("click", (event) => {
 
 async function fetchUsers() {
     try {
-        const response = await fetch("http://localhost:3000/api/users");
+        const response = await fetch("http://192.168.1.28/api/user");
         const data = await response.json();
         console.log("Fetched users:", data);
 
@@ -33,7 +33,7 @@ fetchGames();
 
 async function fetchGames() {
     try {
-        const response = await fetch("http://localhost:3000/api/games");
+        const response = await fetch("http://192.168.1.28/api/game");
         const data = await response.json();
         console.log("Fetched games:", data);
 
@@ -91,7 +91,7 @@ function displayGames(games) {
 async function deleteUser(userId) {
     try {
         const response = await fetch(
-            `http://localhost:3000/api/user/${userId}`,
+            `http://192.168.1.28/api/user/${userId}`,
             {
                 method: "DELETE",
             }
@@ -108,7 +108,7 @@ async function deleteUser(userId) {
 async function deleteGame(gameId) {
     try {
         const response = await fetch(
-            `http://localhost:3000/api/game/${gameId}`,
+            `http://192.168.1.28/api/game/${gameId}`,
             {
                 method: "DELETE",
             }
@@ -127,7 +127,7 @@ async function loginUser() {
     const password = document.getElementById("passwordLogin").value;
 
     try {
-        const response = await fetch("http://localhost:3000/api/login", {
+        const response = await fetch("http://192.168.1.28/api/user/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -152,7 +152,7 @@ async function loginUser() {
 
 async function createGame(userId) {
     try {
-        const response = await fetch("http://localhost:3000/api/game", {
+        const response = await fetch("http://192.168.1.28/api/game/create", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -172,7 +172,7 @@ async function registerUser() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     try {
-        const response = await fetch("http://localhost:3000/api/register", {
+        const response = await fetch("http://192.168.1.28/api/user/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
