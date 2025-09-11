@@ -1,14 +1,14 @@
 <template>
+    <img src="../assets/svg/Frame.svg" alt="" srcset="" />
     <UNavigationMenu
         color="primary"
         :items="items"
         class="w-full justify-center"
     />
 
-        <div class="p-8">
-            <UButton color="primary" size="xl">Mon bouton</UButton>
-        </div>
-
+    <div class="p-8">
+        <UButton color="primary" size="xl">Mon bouton</UButton>
+    </div>
 </template>
 
 <script setup lang="ts">
