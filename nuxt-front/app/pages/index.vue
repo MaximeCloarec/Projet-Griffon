@@ -26,8 +26,8 @@
                             avec d'autres joueurs.
                         </p>
                         <div class="inputContainer">
-                            <input type="text" placeholder="Entrez code lobby"></input>
-                            <button></button>
+                            <input class="inputPlayer" type="text" placeholder="Entrez code lobby"></input>
+                            <button>Rejoindre une partie</button>
                         </div>
                     </div>
                 </div>
@@ -117,7 +117,17 @@ button {
 }
 
 .inputContainer{
+display: flex;
     background-color: white;
     width: fit-content;
+    border-radius: 20px ;
 }
+
+.inputPlayer{
+    color: black;
+    border-radius: 20px;
+    padding: 20px;
+    outline: 0;
+}
+
 </style>
