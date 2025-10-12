@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
                 Math.floor(Math.random() * characters.length)
             );
         }
-        req.body.roomCode = roomCode; // tu attaches le code à la requête
+        req.body.roomCode = roomCode;
 
         next();
     } catch (error) {

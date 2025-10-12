@@ -17,8 +17,8 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 
 
 // Adding routes
-app.use("/api", gameRoutes());
-app.use("/api", userRoutes());
+app.use("/api/games", gameRoutes());
+app.use("/api/users", userRoutes());
 
 //404 Error Handling
 app.use((req, res) => {

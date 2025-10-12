@@ -104,7 +104,14 @@ exports.loginUser = async (req, res) => {
 
     try {
         // Vérifie si l'utilisateur existe
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({
+            where: { email },
+            include: {
+                createdGames: true,
+                joinedGames: true,
+            },
+        });
+
         if (!user) {
             return res
                 .status(409)
@@ -124,7 +131,7 @@ exports.loginUser = async (req, res) => {
                 id: user.id,
                 email: user.email,
                 createdAt: user.createdAt,
-                createdGame: user.createdGames,
+                createdGames: user.createdGames,
                 joinedGames: user.joinedGames,
             },
             process.env.JWT_SECRET,
@@ -138,7 +145,7 @@ exports.loginUser = async (req, res) => {
                 id: user.id,
                 email: user.email,
                 createdAt: user.createdAt,
-                createdGame: user.createdGames,
+                createdGames: user.createdGames,
                 joinedGames: user.joinedGames,
             },
             token: token,
@@ -160,7 +167,7 @@ exports.getUserById = async (req, res) => {
     }
 
     try {
-        const user = await User.findById(id, "-password"); // Exclut le mot de passe des résultats
+        const user = await user.findById(id, "-password"); // Exclut le mot de passe des résultats
         if (!user) {
             return res.status(401).json({ message: "Utilisateur non trouvé." });
         }

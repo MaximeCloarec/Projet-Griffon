@@ -18,7 +18,7 @@ document.getElementById("createGame").addEventListener("click", (event) => {
 
 async function fetchUsers() {
     try {
-        const response = await fetch("http://192.168.1.28/api/user");
+        const response = await fetch("http://192.168.1.28/api/user/");
         const data = await response.json();
         console.log("Fetched users:", data);
 

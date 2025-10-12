@@ -1,6 +1,6 @@
 const express = require("express");
 const userController = require("../controllers/user");
-const authMiddleware = require("../middleware/authMiddleware");
+const authMiddleware = require("../middlewares/auth");
 
 module.exports = () => {
     const router = express.Router();
@@ -8,11 +8,11 @@ module.exports = () => {
 
     router.post("/login", userController.loginUser);
 
-    router.delete("/user/:id", authMiddleware, userController.deleteUser);
+    router.delete("/:id", authMiddleware.authenticate, userController.deleteUser);
 
-    router.get("/users", userController.getAllUsers);
+    router.get("/", userController.getAllUsers);
 
-    router.get("/user/:id", userController.getUserById);
+    router.get("/:id", userController.getUserById);
 
     return router;
 };

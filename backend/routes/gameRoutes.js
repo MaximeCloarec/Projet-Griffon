@@ -5,11 +5,13 @@ const gameController = require("../controllers/game");
 module.exports = () => {
     const router = express.Router();
 
-    router.post("/game", generateCodeRoom, gameController.createGame);
+    router.post("/create", generateCodeRoom, gameController.createGame);
 
-    router.delete("/game/:gameId", gameController.deleteGame);
+    router.delete("/:gameId", gameController.deleteGame);
 
-    router.get("/games", gameController.getGames);
+    router.get("/", gameController.getGames);
+
+    router.get("/:roomCode", gameController.getGame);
 
     return router;
 };
