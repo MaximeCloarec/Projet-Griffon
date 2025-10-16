@@ -1,4 +1,9 @@
 module.exports = (req, res, next) => {
+    if (!req.body) {
+        return res
+            .status(400)
+            .json({ message: "Room code and userId are required" });
+    }
     try {
         const length = 6;
         const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

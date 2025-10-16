@@ -2,9 +2,13 @@ const { PrismaClient } = require("../generated/prisma");
 const prisma = new PrismaClient();
 
 exports.createGame = async (req, res) => {
+    if (!req.body) {
+        return res
+            .status(400)
+            .json({ message: "Room code and userId are required" });
+    }
     const { userId } = req.body;
     const { roomCode } = req.body;
-
 
     console.log("Creating game with data:", roomCode, userId);
     if (!roomCode || !userId) {
@@ -94,5 +98,53 @@ exports.deleteGame = async (req, res) => {
     } catch (error) {
         console.error("Error deleting game:", error);
         res.status(500).json({ message: "Internal server error", error });
+    }
+};
+
+exports.joinGame = async (req, res) => {
+    if (!req.body) {
+        return res
+            .status(400)
+            .json({ message: "Room code and userId are required" });
+    }
+    console.log(req.body);
+
+    const { userId } = req.body;
+    const { roomCode } = req.body;
+
+    if (!userId || !roomCode) {
+        return res
+            .status(400)
+            .json({ message: "Room code and userId are required" });
+    }
+
+    try {
+        const game = await prisma.game.findUnique({
+            where: { roomCode },
+            include: { players: true },
+        });
+
+        if (!game) {
+            return res.status(404).json({ message: "Code de partie invalide" });
+        }
+
+        const alreadyJoined = game.players.some((p) => p.id === userId);
+        if (!alreadyJoined) {
+            await prisma.game.update({
+                where: { roomCode },
+                data: {
+                    players: { connect: { id: userId } },
+                },
+            });
+        }
+        res.status(200).json({
+            message: "Partie rejointe avec succès",
+            game,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Erreur lors de la tentative de rejoindre la partie",
+            error: error.message,
+        });
     }
 };

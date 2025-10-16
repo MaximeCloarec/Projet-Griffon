@@ -13,5 +13,7 @@ module.exports = () => {
 
     router.get("/:roomCode", gameController.getGame);
 
+    router.post("/join", gameController.joinGame);
+
     return router;
 };
