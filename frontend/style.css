@@ -1,9 +1,0 @@
-.formContainer {
-    display: flex;
-    flex-direction: row;
-}
-
-.formContainer > form{
-
-    margin: 0 10px;
-}

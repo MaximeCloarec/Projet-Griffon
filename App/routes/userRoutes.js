@@ -1,5 +1,5 @@
 const express = require("express");
-const userController = require("../controllers/user");
+const userController = require("../Controllers/UserController");
 const authMiddleware = require("../middlewares/auth");
 
 module.exports = () => {
@@ -8,11 +8,12 @@ module.exports = () => {
 
     router.post("/login", userController.loginUser);
 
-    router.delete("/:id", authMiddleware.authenticate, userController.deleteUser);
+    router.delete(
+        "/:id",
+        userController.deleteUser
+    );
 
     router.get("/", userController.getAllUsers);
-
-    router.get("/:id", userController.getUserById);
 
     return router;
 };
