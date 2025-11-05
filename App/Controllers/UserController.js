@@ -52,7 +52,7 @@ class UserController {
 
     //Suppression d'un utilisateur par son id
     async deleteUser(req, res) {
-        const id = parseInt(req.params.id, 10);
+        const id = Number.parseInt(req.params.id, 10);
         if (!id) {
             return res.status(400).json({ message: "ID utilisateur requis." });
         }

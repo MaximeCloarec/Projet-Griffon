@@ -1,5 +1,5 @@
 require("dotenv").config({ path: __dirname + "/.env" });
-const http = require("http");
+const http = require("node:http");
 const app = require("./app");
 
 const PORT = process.env.PORT || 3000;

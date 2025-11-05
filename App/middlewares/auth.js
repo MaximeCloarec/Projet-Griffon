@@ -10,6 +10,8 @@ exports.authenticate = (req, res, next) => {
         req.userId = decoded.userId;
         next();
     } catch (error) {
-        return res.status(401).json({ message: "Token invalide." });
+        return res
+            .status(401)
+            .json({ message: "Token invalide.", error: error.message });
     }
 };

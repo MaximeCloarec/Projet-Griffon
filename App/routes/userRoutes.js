@@ -2,7 +2,7 @@ const express = require("express");
 const userController = require("../Controllers/UserController");
 const authMiddleware = require("../middlewares/auth");
 
-module.exports = () => {
+const userRoutes = () => {
     const router = express.Router();
     router.post("/register", userController.createUser);
 
@@ -17,3 +17,4 @@ module.exports = () => {
 
     return router;
 };
+module.exports = userRoutes;

@@ -10,7 +10,7 @@ exports.validateGame = (data) => {
     }
 
     if (typeof userId !== "number") {
-        throw new Error("Une erreur est survenue.");
+        throw new TypeError("Une erreur est survenue.");
     }
 
     return { userId };
