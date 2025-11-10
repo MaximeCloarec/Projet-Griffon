@@ -12,7 +12,7 @@ const gameRoutes = () => {
 
     router.get("/:roomCode", gameController.getGameByRoomCode);
 
-    // router.post("/join", gameController.joinGame); TODO
+    router.post("/join", gameController.joinGame);
 
     return router;
 };

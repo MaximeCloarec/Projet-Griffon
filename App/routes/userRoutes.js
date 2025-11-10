@@ -9,8 +9,9 @@ const userRoutes = () => {
     router.post("/login", userController.loginUser);
 
     router.delete(
-        "/:id",
-        userController.deleteUser
+        "/me",
+        authMiddleware.authenticate,
+        userController.deleteSelf
     );
 
     router.get("/", userController.getAllUsers);

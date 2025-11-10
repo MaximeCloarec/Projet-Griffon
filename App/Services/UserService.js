@@ -53,12 +53,19 @@ class UserService {
             include: {
                 createdGames: true,
                 joinedGames: true,
-            }
+            },
         });
     }
 
     async deleteUser(id) {
-        return prisma.user.delete({ where: { id } });
+        await prisma.game.deleteMany({
+            where: { creatorId: id },
+        });
+
+        // Enfin supprime le user
+        return prisma.user.delete({
+            where: { id },
+        });
     }
 }
 

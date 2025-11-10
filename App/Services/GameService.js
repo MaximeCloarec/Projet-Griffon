@@ -24,8 +24,6 @@ class GameService {
             });
         } while (existingGame);
 
-        console.log(roomCode);
-
         return prisma.game.create({
             data: {
                 roomCode: roomCode,
@@ -37,12 +35,32 @@ class GameService {
 
     async getGameByRoomCode(roomCode) {
         const game = await prisma.game.findUnique({
-            where: { roomCode },
+            where: { roomCode: roomCode },
+            include: { players: true },
         });
         if (!game) {
             throw new Error("La partie n'existe pas");
         }
         return game;
+    }
+
+    async checkUserInGame(game, userId) {
+        if (game.creatorId === userId) {
+            throw new Error("Le créateur de la partie en fait déjà partie");
+        }
+        if (game.players.some((p) => p.id === userId)) {
+            throw new Error("L'utilisateur a déjà rejoint la partie");
+        }
+        return false;
+    }
+
+    async addPlayersToGame(roomCode, userId) {
+        return prisma.game.update({
+            where: { roomCode },
+            data: {
+                players: { connect: { id: userId } },
+            },
+        });
     }
 }
 

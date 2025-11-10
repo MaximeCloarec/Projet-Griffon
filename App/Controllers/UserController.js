@@ -51,24 +51,24 @@ class UserController {
     }
 
     //Suppression d'un utilisateur par son id
-    async deleteUser(req, res) {
-        const id = Number.parseInt(req.params.id, 10);
-        if (!id) {
-            return res.status(400).json({ message: "ID utilisateur requis." });
-        }
+    async deleteSelf(req, res) {
         try {
-            const user = await UserService.deleteUser(id);
-            if (!user) {
+            const userId = req.user.id;
+
+            const deletedUser = await UserService.deleteUser(userId);
+
+            if (!deletedUser) {
                 return res
                     .status(404)
-                    .json({ message: "Utilisateur non trouvé." });
+                    .json({ message: "Utilisateur introuvable." });
             }
-            res.status(200).json({
-                message: "Utilisateur supprimé avec succès.",
-            });
+
+            res.status(200).json({ message: "Compte supprimé avec succès." });
         } catch (error) {
+            console.error(error);
+
             res.status(500).json({
-                message: "Erreur lors de la suppression de l'utilisateur",
+                message: "Erreur lors de la suppression.",
                 error: error.message,
             });
         }
