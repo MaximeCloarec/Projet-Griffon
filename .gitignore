@@ -1,5 +1,5 @@
 /ressources
 .env
 /node_modules
-/generated/prisma
-/controllersOld
+src/generated
+/coverage

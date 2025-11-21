@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { validateUser } from "../App/Validators/userValidator.js";
+import { validateUser } from "../../src/App/Validators/userValidator";
 
 describe("validateUser", () => {
     it("Valider les données utilisateur correctement", () => {

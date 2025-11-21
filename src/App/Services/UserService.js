@@ -1,22 +1,31 @@
 const { PrismaClient } = require("../../generated/prisma");
 const jwt = require("jsonwebtoken");
-const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
 
 class UserService {
+    constructor(prismaClient = new PrismaClient()) {
+        this.prisma = prismaClient;
+    }
+
+    setPrismaClient(client) {
+        this.prisma = client;
+    }
+
     async createUser(email, password) {
-        const existing = await prisma.user.findUnique({ where: { email } });
+        const existing = await this.prisma.user.findUnique({
+            where: { email },
+        });
         if (existing) throw new Error("Ce mail est déja utilisé");
 
         const hashed = await bcrypt.hash(password, 10);
 
-        return prisma.user.create({
+        return this.prisma.user.create({
             data: { email, password: hashed },
         });
     }
 
     async loginUser(email, password) {
-        const user = await prisma.user.findUnique({
+        const user = await this.prisma.user.findUnique({
             where: { email },
             include: {
                 createdGames: true,
@@ -28,7 +37,6 @@ class UserService {
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) throw new Error("Email ou mot de passe incorrect");
 
-        //Create JWT Token
         const token = jwt.sign(
             {
                 id: user.id,
@@ -40,13 +48,13 @@ class UserService {
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
-        const { password: _, ...safeUser } = user;
 
+        const { password: _, ...safeUser } = user;
         return { user: safeUser, token };
     }
 
     async getAllUser() {
-        return prisma.user.findMany({
+        return this.prisma.user.findMany({
             omit: {
                 password: true,
             },
@@ -58,15 +66,15 @@ class UserService {
     }
 
     async deleteUser(id) {
-        await prisma.game.deleteMany({
+        await this.prisma.game.deleteMany({
             where: { creatorId: id },
         });
-
-        // Enfin supprime le user
-        return prisma.user.delete({
+        return this.prisma.user.delete({
             where: { id },
         });
     }
 }
 
+// Instance par défaut
 module.exports = new UserService();
+module.exports.UserService = UserService; // <-- export de la classe pour les tests

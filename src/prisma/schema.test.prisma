@@ -1,0 +1,31 @@
+datasource dbTest {
+    provider = "sqlite"
+    url      = "file:../../tests/test.db?mode=memory&cache=shared"
+}
+
+generator clientTest {
+    provider   = "prisma-client-js"
+    output     = "../generated/prisma-test"
+    engineType = "library"
+}
+
+model User {
+    id           Int      @id @default(autoincrement())
+    email        String   @unique
+    password     String
+    createdAt    DateTime @default(now())
+    createdGames Game[]   @relation("CreatedGames")
+    joinedGames  Game[]   @relation("JoinedGames")
+}
+
+model Game {
+    id          String   @id @default(cuid())
+    creatorId   Int
+    roomCode    String   @unique
+    name        String
+    description String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    creator     User     @relation("CreatedGames", fields: [creatorId], references: [id])
+    players     User[]   @relation("JoinedGames")
+}
