@@ -18,6 +18,8 @@ class UserService {
         if (existing) throw new Error("Ce mail est déja utilisé");
 
         const hashed = await bcrypt.hash(password, 10);
+        console.log(hashed);
+        
 
         return this.prisma.user.create({
             data: { email, password: hashed },

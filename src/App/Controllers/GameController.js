@@ -32,7 +32,7 @@ class GameController {
 
     async getGameByRoomCode(req, res) {
         try {
-            const { roomCode } = validator.validateGameCode(req.params);
+            const { roomCode } = validateGameCode(req.params);
 
             const game = await GameService.getGameByRoomCode(roomCode);
             res.status(200).json({

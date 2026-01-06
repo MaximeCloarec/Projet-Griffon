@@ -1,3 +1,4 @@
+// Permet de valider les données liées aux parties de jeu
 exports.validateGame = (data) => {
     if (!data) {
         throw new Error("Données manquantes");
@@ -16,6 +17,7 @@ exports.validateGame = (data) => {
     return { userId };
 };
 
+// Permet de valider le code de la partie
 exports.validateGameCode = (data) => {
     if (!data) {
         throw new Error("Données manquantes");
