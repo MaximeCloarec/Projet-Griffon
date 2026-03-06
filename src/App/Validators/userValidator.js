@@ -1,23 +1,25 @@
-exports.validateUser = (data) => {
+import { z } from "zod";
+
+const userSchema = z.object({
+    email: z.email("Format d'email invalide."),
+    password: z
+        .string()
+        .min(8, "Le mot de passe doit contenir au moins 8 caractères.")
+        .regex(
+            /[A-Z]/,
+            "Le mot de passe doit contenir au moins une lettre majuscule.",
+        )
+        .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre."),
+});
+
+export function validateUser(data) {
     if (!data) {
         throw new Error("Données manquantes.");
     }
 
-    const { email, password } = data;
-
-    if (!email || !password) {
-        throw new Error("Email et mot de passe requis.");
+    try {
+        return userSchema.parse(data);
+    } catch (error) {
+        throw new Error(error.errors[0].message);
     }
-
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(email)) {
-        throw new Error("Format d'email invalide.");
-    }
-
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordRegex.test(password)) {
-        throw new Error("Format de mot de passe invalide.");
-    }
-
-    return { email, password };
-};
+}

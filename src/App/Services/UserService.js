@@ -18,7 +18,6 @@ class UserService {
         if (existing) throw new Error("Ce mail est déja utilisé");
 
         const hashed = await bcrypt.hash(password, 10);
-        console.log(hashed);
         
 
         return this.prisma.user.create({
@@ -43,9 +42,7 @@ class UserService {
             {
                 id: user.id,
                 email: user.email,
-                createdAt: user.createdAt,
-                createdGames: user.createdGames,
-                joinedGames: user.joinedGames,
+                createdAt: user.createdAt
             },
             process.env.JWT_SECRET,
             { expiresIn: "1h" }

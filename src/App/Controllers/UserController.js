@@ -16,7 +16,7 @@ class UserController {
             });
         } catch (error) {
             //Gestion des erreurs
-            res.status(400).json({ message: error.message });
+            res.status(400).json({ message: "Une erreur est survenu avec le serveur" });
         }
     }
 
@@ -36,7 +36,7 @@ class UserController {
                 token: token,
             });
         } catch (error) {
-            res.status(401).json({ message: error.message });
+            res.status(401).json({ message: "Une erreur est survenu avec le serveur" });
         }
     }
 
@@ -46,7 +46,7 @@ class UserController {
             const users = await UserService.getAllUser();
             res.json(users);
         } catch (error) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json({ message: "Une erreur est survenu avec le serveur" });
         }
     }
 
@@ -68,8 +68,7 @@ class UserController {
             console.error(error);
 
             res.status(500).json({
-                message: "Erreur lors de la suppression.",
-                error: error.message,
+                message: "Erreur lors de la suppression."
             });
         }
     }
