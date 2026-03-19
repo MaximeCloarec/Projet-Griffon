@@ -1,77 +1,78 @@
-const UserService = require("../Services/UserService.js");
 const { validateUser } = require("../Validators/userValidator.js");
 
 class UserController {
-    //Créer un utilisateur avec mot de passe et email
+    constructor(userService) {
+        this.userService = userService;
+    }
+
     async createUser(req, res) {
         try {
-            const { email, password } = validateUser(req.body); //Validation format et existance des champs
+            const { email, password } = validateUser(req.body);
 
-            const user = await UserService.createUser(email, password); //Vérification de l'email et création en bdd
+            const user = await this.userService.createUser(email, password);
 
-            //Validation de la création
             res.status(201).json({
                 message: "Utilisateur créé avec succès",
                 user,
             });
         } catch (error) {
-            //Gestion des erreurs
-            res.status(400).json({ message: "Une erreur est survenu avec le serveur" });
+            res.status(400).json({
+                message: "Une erreur est survenue avec le serveur",
+            });
         }
     }
 
-    //Récupération de l'utilisateur en bdd avec son email et mot de passe
     async loginUser(req, res) {
         try {
-            const { email, password } = validateUser(req.body); //Validation format et existance des champs
+            const { email, password } = validateUser(req.body);
 
-            const { user, token } = await UserService.loginUser(
-                email,
-                password
-            ); //Vérification de l'existence de l'utilisateur et récupération en bdd
+            const { user, token } =
+                await this.userService.loginUser(email, password);
 
             res.status(200).json({
                 message: "Connexion réussie",
-                user: user,
-                token: token,
+                user,
+                token,
             });
         } catch (error) {
-            res.status(401).json({ message: "Une erreur est survenu avec le serveur" });
+            res.status(401).json({
+                message: "Une erreur est survenue avec le serveur",
+            });
         }
     }
 
-    //Récupération de tous les utilisateurs en bdd
     async getAllUsers(req, res) {
         try {
-            const users = await UserService.getAllUser();
+            const users = await this.userService.getAllUser();
             res.json(users);
         } catch (error) {
-            res.status(500).json({ message: "Une erreur est survenu avec le serveur" });
+            res.status(500).json({
+                message: "Une erreur est survenue avec le serveur",
+            });
         }
     }
 
-    //Suppression d'un utilisateur par son id
     async deleteSelf(req, res) {
         try {
             const userId = req.user.id;
 
-            const deletedUser = await UserService.deleteUser(userId);
+            const deletedUser = await this.userService.deleteUser(userId);
 
             if (!deletedUser) {
-                return res
-                    .status(404)
-                    .json({ message: "Utilisateur introuvable." });
+                return res.status(404).json({
+                    message: "Utilisateur introuvable.",
+                });
             }
 
-            res.status(200).json({ message: "Compte supprimé avec succès." });
+            res.status(200).json({
+                message: "Compte supprimé avec succès.",
+            });
         } catch (error) {
-            console.error(error);
-
             res.status(500).json({
-                message: "Erreur lors de la suppression."
+                message: "Erreur lors de la suppression.",
             });
         }
     }
 }
 
-module.exports = new UserController();
+module.exports = UserController;

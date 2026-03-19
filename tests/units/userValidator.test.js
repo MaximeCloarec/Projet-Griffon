@@ -12,13 +12,16 @@ describe("validateUser", () => {
         expect(() => validateUser(null)).toThrow("Données manquantes.");
     });
 
-    it("Lancer une erreur si l'email ou le mot de passe est manquant", () => {
-        expect(() => validateUser({ email: "", password: "1234567A" })).toThrow(
-            "Email et mot de passe requis."
-        );
+    it("Lancer une erreur si email vide", () => {
+        expect(() =>
+            validateUser({ email: "", password: "1234567A" })
+        ).toThrow("Format d'email invalide.");
+    });
+
+    it("Lancer une erreur si password vide", () => {
         expect(() =>
             validateUser({ email: "test@test.com", password: "" })
-        ).toThrow("Email et mot de passe requis.");
+        ).toThrow("Le mot de passe doit contenir au moins 8 caractères.");
     });
 
     it("Lancer une erreur de format", () => {
@@ -27,6 +30,6 @@ describe("validateUser", () => {
         ).toThrow("Format d'email invalide.");
         expect(() =>
             validateUser({ email: "test@test.com", password: "123" })
-        ).toThrow("Format de mot de passe invalide.");
+        ).toThrow("Le mot de passe doit contenir au moins 8 caractères.");
     });
 });

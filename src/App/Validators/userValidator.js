@@ -20,6 +20,6 @@ export function validateUser(data) {
     try {
         return userSchema.parse(data);
     } catch (error) {
-        throw new Error(error.errors[0].message);
+        throw new Error(error.issues[0].message);
     }
 }

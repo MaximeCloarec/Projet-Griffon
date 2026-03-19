@@ -1,24 +1,19 @@
-const { PrismaClient } = require("../../generated/prisma");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 class UserService {
-    constructor(prismaClient = new PrismaClient()) {
+    constructor(prismaClient) {
         this.prisma = prismaClient;
-    }
-
-    setPrismaClient(client) {
-        this.prisma = client;
     }
 
     async createUser(email, password) {
         const existing = await this.prisma.user.findUnique({
             where: { email },
         });
+
         if (existing) throw new Error("Ce mail est déja utilisé");
 
         const hashed = await bcrypt.hash(password, 10);
-        
 
         return this.prisma.user.create({
             data: { email, password: hashed },
