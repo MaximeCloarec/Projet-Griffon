@@ -6,5 +6,7 @@ export default defineConfig({
             provider: "v8", // or 'istanbul'
             exclude: ['generated/**']
         },
+        globals: true,
+        pool: "forks"
     },
 });

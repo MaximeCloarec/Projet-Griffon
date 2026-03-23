@@ -5,7 +5,7 @@ class UserController {
         this.userService = userService;
     }
 
-    async createUser(req, res) {
+    createUser = async (req, res) => {
         try {
             const { email, password } = validateUser(req.body);
 
@@ -22,7 +22,7 @@ class UserController {
         }
     }
 
-    async loginUser(req, res) {
+    loginUser = async (req, res) => {
         try {
             const { email, password } = validateUser(req.body);
 
@@ -35,24 +35,28 @@ class UserController {
                 token,
             });
         } catch (error) {
+            console.log(error);
+
             res.status(401).json({
                 message: "Une erreur est survenue avec le serveur",
             });
         }
     }
 
-    async getAllUsers(req, res) {
+    getAllUsers = async (req, res) => {
         try {
             const users = await this.userService.getAllUser();
             res.json(users);
         } catch (error) {
+            console.log(error);
+
             res.status(500).json({
                 message: "Une erreur est survenue avec le serveur",
             });
         }
     }
 
-    async deleteSelf(req, res) {
+    deleteSelf = async (req, res) => {
         try {
             const userId = req.user.id;
 

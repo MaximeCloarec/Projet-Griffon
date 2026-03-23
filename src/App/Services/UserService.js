@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { PrismaClient } = require("../../generated/prisma");
 
 class UserService {
-    constructor(prismaClient) {
+    constructor(prismaClient = new PrismaClient()) {
         this.prisma = prismaClient;
     }
 

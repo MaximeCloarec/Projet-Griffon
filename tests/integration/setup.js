@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { beforeAll, afterAll } from "vitest";
-import { PrismaClient } from "../../src/generated/prisma-test/index.js"; // ✅ FIX ICI
+import { PrismaClient } from "../../src/generated/prisma-test/index.js";
 import fs from "node:fs";
 
 export const prismaTest = new PrismaClient();
