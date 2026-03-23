@@ -10,7 +10,7 @@ const prisma = {
     },
 };
 
-UserService.prisma = prisma;
+const userService = new UserService(prisma);
 
 describe("UserService.createUser", () => {
     it("Créer un utilisateur si l'email est libre", async () => {
@@ -21,8 +21,8 @@ describe("UserService.createUser", () => {
         });
         vi.spyOn(bcrypt, "hash").mockResolvedValue("hashed");
 
-        const user = await UserService.createUser("test@test.com", "1234567A");
-
+        const user = await userService.createUser("test@test.com", "1234567A");
+        
         expect(prisma.user.findUnique).toHaveBeenCalledWith({
             where: { email: "test@test.com" },
         });
@@ -39,7 +39,7 @@ describe("UserService.createUser", () => {
         });
 
         await expect(
-            UserService.createUser("used@example.com", "Azerty12")
+            userService.createUser("used@example.com", "Azerty12")
         ).rejects.toThrow("Ce mail est déja utilisé");
     });
 });
@@ -57,7 +57,7 @@ describe("UserService.loginUser", () => {
         vi.spyOn(bcrypt, "compare").mockResolvedValue(true);
         vi.spyOn(require("jsonwebtoken"), "sign").mockReturnValue("token");
         await expect(
-            UserService.loginUser("test@test.com", "1234567A")
+            userService.loginUser("test@test.com", "1234567A")
         ).resolves.toEqual({
             user: {
                 id: 1,
@@ -72,7 +72,7 @@ describe("UserService.loginUser", () => {
     it("Refuser la connexion avec un email inconnu", async () => {
         prisma.user.findUnique.mockResolvedValue(null);
         await expect(
-            UserService.loginUser("test@test.com", "1234567A")
+            userService.loginUser("test@test.com", "1234567A")
         ).rejects.toThrow("Email ou mot de passe incorrect");
     });
 
@@ -87,7 +87,7 @@ describe("UserService.loginUser", () => {
         });
         vi.spyOn(bcrypt, "compare").mockResolvedValue(false);
         await expect(
-            UserService.loginUser("test@test.com", "wrongpassword")
+            userService.loginUser("test@test.com", "wrongpassword")
         ).rejects.toThrow("Email ou mot de passe incorrect");
     });
 });
@@ -108,7 +108,7 @@ describe("UserService.getAllUser", () => {
                 joinedGames: [],
             },
         ]);
-        const users = await UserService.getAllUser();
+        const users = await userService.getAllUser();
         expect(prisma.user.findMany).toHaveBeenCalledWith({
             omit: {
                 password: true,
@@ -133,7 +133,7 @@ describe("UserService.deleteUser", () => {
             id: 1,
             email: "test@test.com",
         });
-        const user = await UserService.deleteUser(1);
+        const user = await userService.deleteUser(1);
         expect(prisma.game.deleteMany).toHaveBeenCalledWith({
             where: { creatorId: 1 },
         });
@@ -150,7 +150,7 @@ describe("UserService.deleteUser", () => {
         prisma.user.delete.mockRejectedValue(
             new Error("Utilisateur non trouvé")
         );
-        await expect(UserService.deleteUser(1)).rejects.toThrow(
+        await expect(userService.deleteUser(1)).rejects.toThrow(
             "Utilisateur non trouvé"
         );
         expect(prisma.game.deleteMany).toHaveBeenCalledWith({

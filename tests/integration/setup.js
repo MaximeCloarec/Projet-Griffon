@@ -1,18 +1,14 @@
 import { execSync } from "child_process";
-import { beforeAll, afterAll } from "vitest";
-import { PrismaClient } from "../../src/generated/prisma-test/index.js";
-import fs from "node:fs";
+import fs from "fs";
+import { PrismaClient } from "../../src/generated/prisma-test/client.js";
 
 export const prismaTest = new PrismaClient();
 
 beforeAll(async () => {
     // Reset DB test
-    execSync(
-        "npx prisma db push --force-reset --schema=./src/prisma/schema.test.prisma",
-        {
-            stdio: "inherit",
-        }
-    );
+    execSync("npx prisma db push --force-reset --schema=./src/prisma/schema.test.prisma", {
+        stdio: "inherit",
+    });
 
     await prismaTest.$connect();
 });
@@ -20,8 +16,8 @@ beforeAll(async () => {
 afterAll(async () => {
     await prismaTest.$disconnect();
 
-    // Supprime le fichier SQLite
-    if (fs.existsSync("./tests/test.db")) {
-        fs.unlinkSync("./tests/test.db");
-    }
+    // // Supprime le fichier SQLite
+    // if (fs.existsSync("./tests/test.db")) {
+    //     fs.unlinkSync("./tests/test.db");
+    // }
 });

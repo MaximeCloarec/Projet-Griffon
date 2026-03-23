@@ -7,13 +7,10 @@ import {
 } from "vitest";
 
 const { prismaTest } = require("./setup");
-const { UserService } = require("../../src/App/Services/UserService");
+const UserService = require("../../src/App/Services/UserService");
 
-let userService;
+const userService = new UserService(prismaTest);
 
-beforeAll(async () => {
-    userService = new UserService(prismaTest);
-});
 
 afterAll(async () => {
     await prismaTest.user.deleteMany();
@@ -65,7 +62,16 @@ describe("UserService.getAllUser", () => {
         const users = await userService.getAllUser();
 
         expect(Array.isArray(users)).toBe(true);
-        expect(users.length).toBeGreaterThan(0);
+        expect(users).toEqual([
+            {
+                id: 1,
+                email: "test@test.com",
+                createdAt: expect.any(Date),
+                createdGames: [],
+                joinedGames: [],
+            },
+        ]);
+
     });
 });
 

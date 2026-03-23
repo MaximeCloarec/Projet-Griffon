@@ -7,6 +7,9 @@ export default defineConfig({
             exclude: ['generated/**']
         },
         globals: true,
-        pool: "forks"
+        pool: "forks",
+        env: {
+            DATABASE_URL: "file:./tests/test.db"
+        }
     },
 });

@@ -7,7 +7,7 @@ class UserService {
         this.prisma = prismaClient;
     }
 
-    async createUser(email, password) {
+    createUser = async (email, password) => {
         const existing = await this.prisma.user.findUnique({
             where: { email },
         });
@@ -21,7 +21,7 @@ class UserService {
         });
     }
 
-    async loginUser(email, password) {
+    loginUser = async (email, password) => {
         const user = await this.prisma.user.findUnique({
             where: { email },
             include: {
@@ -48,7 +48,7 @@ class UserService {
         return { user: safeUser, token };
     }
 
-    async getAllUser() {
+    getAllUser= async () => {
         return this.prisma.user.findMany({
             omit: {
                 password: true,
@@ -60,7 +60,7 @@ class UserService {
         });
     }
 
-    async deleteUser(id) {
+    deleteUser= async (id) => {
         await this.prisma.game.deleteMany({
             where: { creatorId: id },
         });
@@ -70,6 +70,4 @@ class UserService {
     }
 }
 
-// Instance par défaut
-module.exports = new UserService();
-module.exports.UserService = UserService; // <-- export de la classe pour les tests
+module.exports = UserService;
