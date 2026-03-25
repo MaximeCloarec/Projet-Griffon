@@ -1,25 +1,28 @@
-const GameService = require("../Services/GameService.js");
 const {
     validateGameCode,
     validateGame,
 } = require("../Validators/gameValidator.js");
 
 class GameController {
+    constructor(gameService) {
+        this.gameService = gameService;
+    }
+
     //Récupération de tous les jeux en bdd
-    async getAllGames(req, res) {
+    getAllGames = async (req, res) => {
         try {
-            const games = await GameService.getAllGame();
+            const games = await this.gameService.getAllGame();
             res.json(games);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
-    }
+    };
 
-    async createGame(req, res) {
+    createGame = async (req, res) => {
         try {
             const { userId } = validateGame(req.body);
 
-            const game = await GameService.createGame(userId);
+            const game = await this.gameService.createGame(userId);
 
             res.status(201).json({
                 message: "Jeu créé avec succès",
@@ -28,13 +31,13 @@ class GameController {
         } catch (error) {
             res.status(400).json({ message: error.message });
         }
-    }
+    };
 
-    async getGameByRoomCode(req, res) {
+    getGameByRoomCode = async (req, res) => {
         try {
             const { roomCode } = validateGameCode(req.params);
 
-            const game = await GameService.getGameByRoomCode(roomCode);
+            const game = await this.gameService.getGameByRoomCode(roomCode);
             res.status(200).json({
                 message: "Jeu récupéré avec succès",
                 game,
@@ -42,28 +45,28 @@ class GameController {
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
-    }
+    };
 
-    async joinGame(req, res) {
+    joinGame = async (req, res) => {
         try {
             const { roomCode } = validateGameCode(req.body);
 
             const { userId } = validateGame(req.body);
 
-            const game = await GameService.getGameByRoomCode(roomCode);
+            const game = await this.gameService.getGameByRoomCode(roomCode);
 
             const alreadyJoined = await GameService.checkUserInGame(
                 game,
-                userId
+                userId,
             );
 
             if (!alreadyJoined) {
-                await GameService.addPlayersToGame(roomCode, userId);
+                await this.gameService.addPlayersToGame(roomCode, userId);
             }
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
-    }
+    };
 }
 
-module.exports = new GameController();
+module.exports = GameController;

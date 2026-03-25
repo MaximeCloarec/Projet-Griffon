@@ -1,5 +1,7 @@
 const express = require("express");
-const gameController = require("../Controllers/GameController.js");
+const GameController = require("../Controllers/GameController");
+const GameService = require("../Services/GameService");
+const gameController = new GameController(new GameService());
 
 const gameRoutes = () => {
     const router = express.Router();
